@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+<h2>My Complaints</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Issue</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="complaintTable">
+        <!-- Populated by JavaScript -->
+    </tbody>
+</table>
+
+<!-- KSEB Rating Modal -->
+<div class="modal fade" id="ksebRatingModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Rate KSEB Service</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="ksebRatingForm">
+                    <input type="hidden" id="complaintId" name="complaintId">
+                    <div class="mb-3">
+                        <label for="ksebRating" class="form-label">Rating (1-5)</label>
+                        <input type="number" class="form-control" id="ksebRating" name="kseb_rating" min="1" max="5" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Rating</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<p>Please <a href="{% url 'login' %}">login</a> to view your complaints.</p>
+{% endif %}
+{% endblock %}

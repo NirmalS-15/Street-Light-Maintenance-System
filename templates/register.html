@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Register</h2>
+    <div class="row">
+        <!-- User Registration Block -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">User Registration</h3>
+                    <p class="card-text">Register as a user to submit and track street light complaints.</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="hidden" name="role" value="user">
+                        <button type="submit" class="btn btn-primary">Register as User</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- KSEB Registration Block -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">KSEB Staff Registration</h3>
+                    <p class="card-text">Register as KSEB staff to view and resolve complaints.</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="hidden" name="role" value="kseb">
+                        <button type="submit" class="btn btn-primary">Register as KSEB Staff</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

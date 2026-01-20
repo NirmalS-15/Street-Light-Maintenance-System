@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2>KSEB Admin Dashboard</h2>
+    <h3>Complaints</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>User</th>
+                <th>Type</th>
+                <th>District</th>
+                <th>Place</th>
+                <th>Location</th>
+                <th>Issue</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Accepted</th>
+                <th>Resolved</th>
+                <th>Resolution Notes</th>
+                <th>Resolution Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="adminComplaintList">
+            {% for complaint in complaints %}
+            <tr>
+                <td>{{ complaint.id }}</td>
+                <td>{{ complaint.user.username }}</td>
+                <td>{{ complaint.type }}</td>
+                <td>{{ complaint.district }}</td>
+                <td>{{ complaint.place }}</td>
+                <td>{{ complaint.location }}</td>
+                <td>{{ complaint.issue }}</td>
+                <td>{{ complaint.description }}</td>
+                <td>{{ complaint.status }}</td>
+                <td>{{ complaint.created_at }}</td>
+                <td>{{ complaint.accepted_at|default:"N/A" }}</td>
+                <td>{{ complaint.resolved_at|default:"N/A" }}</td>
+                <td>{{ complaint.resolution_notes|default:"N/A" }}</td>
+                <td>
+                    {% if complaint.resolution_image %}
+                    <a href="{{ complaint.resolution_image.url }}" target="_blank">View Image</a>
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>
+                    {% if complaint.status == 'pending' %}
+                    <button class="btn btn-primary accept-complaint" data-id="{{ complaint.id }}">Accept</button>
+                    {% endif %}
+                    {% if complaint.status == 'accepted' %}
+                    <button class="btn btn-success resolve-complaint" data-id="{{ complaint.id }}" data-bs-toggle="modal" data-bs-target="#resolveModal{{ complaint.id }}">Resolve</button>
+                    {% endif %}
+                </td>
+            </tr>
+            <!-- Modal for resolving complaint -->
+            <div class="modal fade" id="resolveModal{{ complaint.id }}" tabindex="-1" aria-labelledby="resolveModalLabel{{ complaint.id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="resolveModalLabel{{ complaint.id }}">Resolve Complaint #{{ complaint.id }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="resolveForm{{ complaint.id }}" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <label for="resolution_notes{{ complaint.id }}" class="form-label">Resolution Notes</label>
+                                    <textarea class="form-control" id="resolution_notes{{ complaint.id }}" name="resolution_notes" rows="4" required></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="resolution_image{{ complaint.id }}" class="form-label">Resolution Image</label>
+                                    <input type="file" class="form-control" id="resolution_image{{ complaint.id }}" name="resolution_image" accept="image/*">
+                                </div>
+                                <button type="submit" class="btn btn-success">Resolve</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h3>Website Feedback</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>User</th>
+                <th>Rating</th>
+                <th>Feedback</th>
+                <th>Created</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fb in feedback %}
+            <tr>
+                <td>{{ fb.id }}</td>
+                <td>{{ fb.user.username }}</td>
+                <td>{{ fb.rating }}</td>
+                <td>{{ fb.feedback }}</td>
+                <td>{{ fb.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script src="{% static 'js/script.js' %}"></script>
+{% endblock %}
